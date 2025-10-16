@@ -18,9 +18,13 @@ Efficiency and parameter-count comparison
 Error analysis with representative misclassifications
 
 🗂️ Repository Structure
+
 ├── code.ipynb      # Main Colab notebook (code + results)
+
 ├── data/           # Dataset files (Financial PhraseBank subsets)
+
 │   └── Sentences_AllAgree.txt
+
 └── README.md       # This file
 
 ⚙️ Setup & Installation
