@@ -19,9 +19,9 @@ Error analysis with representative misclassifications
 
 🗂️ Repository Structure
 ├── code.ipynb      # Main Colab notebook (code + results)
-├── data/                       # Dataset files (Financial PhraseBank subsets)
+├── data/           # Dataset files (Financial PhraseBank subsets)
 │   └── Sentences_AllAgree.txt
-└── README.md                   # This file
+└── README.md       # This file
 
 ⚙️ Setup & Installation
 # Clone repository
