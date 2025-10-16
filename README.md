@@ -2,6 +2,7 @@
 📘 Overview
 
 This repository contains the implementation and report for the project Parameter-Efficient Fine-Tuning of FinBERT for Financial Sentiment Classification.
+
 The goal is to compare Full Fine-Tuning and LoRA (Low-Rank Adaptation) on the Financial PhraseBank dataset for classifying financial news sentences as positive, neutral, or negative.
 
 LoRA achieves near-parity performance with Full Fine-Tuning while updating roughly 1% of parameters only, demonstrating the effectiveness of parameter-efficient learning for financial NLP.
@@ -39,12 +40,13 @@ If running in Google Colab, simply upload the notebook and dataset files into /c
 🚀 Running the Project
 
 1. Open code.ipynb in Jupyter Notebook or Google Colab.
+   
 2. Run all cells sequentially:
     - Data loading and preprocessing
     - Baseline → Full Fine-Tuning → LoRA training
     - Evaluation and efficiency comparison
+  
 3. View metrics, plots, and misclassified examples at the end of the notebook.
-
 
 📊 Results Summary
 | Model                 | Accuracy | Macro-F1 | ROC-AUC | PR-AUC | % Trainable Params |
@@ -68,7 +70,6 @@ Biases in data or annotation quality may lead to misclassification of market-sen
 Future work should test robustness on multilingual or social-media data and integrate explainability tools such as SHAP or attention visualisation.
 
 🧑‍💻 Acknowledgements
-
 Dataset: Financial PhraseBank
  by M. Takala et al.
 Model: ProsusAI FinBERT
