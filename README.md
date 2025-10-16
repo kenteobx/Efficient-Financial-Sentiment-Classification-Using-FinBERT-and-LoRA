@@ -7,6 +7,7 @@ The goal is to compare Full Fine-Tuning and LoRA (Low-Rank Adaptation) on the Fi
 LoRA achieves near-parity performance with Full Fine-Tuning while updating roughly 1% of parameters only, demonstrating the effectiveness of parameter-efficient learning for financial NLP.
 
 🧠 Features
+
 Financial PhraseBank preprocessing and label encoding
 TF-IDF + Logistic Regression baseline
 FinBERT fine-tuning using Hugging Face Transformers
