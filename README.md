@@ -20,7 +20,7 @@ Error analysis with representative misclassifications
 🗂️ Repository Structure
 ```
 ├── code.ipynb      # Main Colab notebook (code + results)
-├── data/           # Dataset files (Financial PhraseBank subsets)
+├── data/           # Dataset file (Financial PhraseBank subsets)
 │   └── Sentences_AllAgree.txt
 └── README.md       # This file
 ```
@@ -60,28 +60,20 @@ If running in Google Colab, simply upload the notebook and dataset files into /c
 LoRA retains almost identical predictive performance while using 98.8 % fewer trainable parameters.
 
 💡 Key Takeaways
-
     - Performance: Transformer models vastly outperform classical baselines.
-  
     - Efficiency: LoRA delivers near-parity performance with a fraction of parameters. 
-  
     - Error Behaviour: Models struggle most on forward-looking or comparative statements.
-  
     - Interpretability: Lexical inspection aligns model attention with expected financial tone.
 
 ⚖️ Ethical Considerations & Limitations
 
 Financial sentiment models can influence decision-making.
-
 Biases in data or annotation quality may lead to misclassification of market-sensitive information.
-
 Future work should test robustness on multilingual or social-media data and integrate explainability tools such as SHAP or attention visualisation.
 
 
 🧑‍💻 Acknowledgements
 Dataset: Financial PhraseBank
  by M. Takala et al.
-
 Model: ProsusAI FinBERT
-
 PEFT/LoRA: Hu et al. (2022), LoRA: Low-Rank Adaptation of Large Language Models.
