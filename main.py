@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Main
-
+"""
 # Libraries
 """
 
@@ -23,13 +22,13 @@ from sklearn.preprocessing import label_binarize
 import matplotlib.pyplot as plt
 import time
 
-# pip install evaluate
+!pip install evaluate
 import evaluate
 
-# pip -q install peft==0.11.1
+!pip -q install peft==0.11.1
 from peft import LoraConfig, get_peft_model, PeftModel
 
-# pip install wordcloud
+!pip install wordcloud
 from wordcloud import WordCloud
 
 """## set seed for reproducibility"""
@@ -109,7 +108,7 @@ model = AutoModelForSequenceClassification.from_pretrained(MODEL, num_labels=num
 
 data_collator = DataCollatorWithPadding(tokenizer=tok)
 metric_acc = evaluate.load("accuracy")
-metric_f1 = evaluate.load("f1")
+metric_f1  = evaluate.load("f1")
 
 def compute_metrics(eval_pred):
     preds = np.argmax(eval_pred.predictions, axis=1)
@@ -151,7 +150,7 @@ trainer.train()
 eval_val = trainer.evaluate()
 
 t0=time.time()
-time=time.time() - t0
+time=time.time()-t0
 val = trainer.evaluate()
 
 preds = trainer.predict(ds_tok["test"])
@@ -182,15 +181,15 @@ lora_cfg = LoraConfig(
     lora_alpha=16, # scaling
     lora_dropout=0.1, # regularization
     bias="none",
-    target_modules = ["query", "key", "value", "dense"],
-    task_type = "SEQ_CLS",
+    target_modules=["query", "key", "value", "dense"],
+    task_type="SEQ_CLS",
 )
 
 lora_model = get_peft_model(base_model, lora_cfg)
 
 def count_trainable(m):
     trainable = sum(p.numel() for p in m.parameters() if p.requires_grad)
-    total = sum(p.numel() for p in m.parameters())
+    total     = sum(p.numel() for p in m.parameters())
     print(f"Trainable: {trainable:,} / Total: {total:,}  ({100*trainable/total:.2f}% trainable)")
 
 count_trainable(lora_model)
@@ -242,7 +241,7 @@ print(classification_report(lora_y_true, lora_y_pred, target_names=['positive','
 
 summary = {
     "FullFT": {"val_acc": full_metrics_val["eval_accuracy"], "val_f1": full_metrics_val["eval_f1_macro"]},
-    "LoRA":   {"val_acc": lora_val["eval_accuracy"], "val_f1": lora_val["eval_f1_macro"]},
+    "LoRA":   {"val_acc": lora_val["eval_accuracy"],         "val_f1": lora_val["eval_f1_macro"]},
 }
 summary
 
@@ -267,7 +266,7 @@ def softmax_np(logits):
 def macro_auc_pr(y_true_int, prob, n_classes):
     """
     y_true_int: shape (n_samples,) integer labels
-    prob: shape (n_samples, n_classes) predicted probabilities
+    prob:      shape (n_samples, n_classes) predicted probabilities
     returns: (macro_roc_auc, macro_pr_auc)
     """
     y_true_ovr = label_binarize(y_true_int, classes=list(range(n_classes)))
@@ -283,28 +282,28 @@ Xte = vec.transform(test_df["sentence"])
 base_pred = lr.predict(Xte)
 base_prob = lr.predict_proba(Xte)
 
-base_acc = accuracy_score(y_true_test, base_pred)
-base_f1 = f1_score(y_true_test, base_pred, average='macro')
+base_acc  = accuracy_score(y_true_test, base_pred)
+base_f1   = f1_score(y_true_test, base_pred, average='macro')
 base_roc, base_pr = macro_auc_pr(y_true_test, base_prob, n_classes)
 
 # Full FT (trainer)
-full_out = trainer.predict(ds_tok["test"])
+full_out   = trainer.predict(ds_tok["test"])
 full_logits = full_out.predictions
-full_pred = full_logits.argmax(axis=1)
-full_prob = softmax_np(full_logits)
+full_pred   = full_logits.argmax(axis=1)
+full_prob  = softmax_np(full_logits)
 
-full_acc = accuracy_score(y_true_test, full_pred)
-full_f1 = f1_score(y_true_test, full_pred, average='macro')
+full_acc  = accuracy_score(y_true_test, full_pred)
+full_f1   = f1_score(y_true_test, full_pred, average='macro')
 full_roc, full_pr = macro_auc_pr(y_true_test, full_prob, n_classes)
 
 # LoRA
-lora_out = lora_trainer.predict(ds_tok["test"])
+lora_out   = lora_trainer.predict(ds_tok["test"])
 lora_logits = lora_out.predictions
-lora_pred = lora_logits.argmax(axis=1)
-lora_prob = softmax_np(lora_logits)
+lora_pred   = lora_logits.argmax(axis=1)
+lora_prob  = softmax_np(lora_logits)
 
-lora_acc = accuracy_score(y_true_test, lora_pred)
-lora_f1 = f1_score(y_true_test, lora_pred, average='macro')
+lora_acc  = accuracy_score(y_true_test, lora_pred)
+lora_f1   = f1_score(y_true_test, lora_pred, average='macro')
 lora_roc, lora_pr = macro_auc_pr(y_true_test, lora_prob, n_classes)
 
 # Summary table
@@ -312,12 +311,13 @@ import pandas as pd
 summary_df = pd.DataFrame([
     ["TF-IDF + LogisticRegression", base_acc, base_f1, base_roc, base_pr],
     ["FinBERT (Full Fine-Tuning)", full_acc, full_f1, full_roc, full_pr],
-    ["FinBERT (LoRA / PEFT)", lora_acc, lora_f1, lora_roc, lora_pr],
+    ["FinBERT (LoRA / PEFT)",      lora_acc, lora_f1, lora_roc, lora_pr],
 ], columns=["Model","Accuracy","Macro-F1","Macro ROC-AUC (OvR)","Macro PR-AUC"])
 
 print(summary_df.to_string(index=False, float_format=lambda x: f"{x:.4f}"))
 
 """## Bar chart"""
+
 models = ['TF-IDF', 'FinBERT (Full FT)', 'FinBERT (LoRA)']
 f1 = [0.820, 0.972, 0.969]
 
@@ -328,9 +328,10 @@ plt.ylim(0.75, 1.0)
 plt.show()
 
 """## Efficiency vs. performance visualisation"""
+
 models = ["Full Fine-Tuning", "LoRA (PEFT)"]
 params_m = [109.48, 1.34]
-f1 = [0.9715, 0.9691]
+f1 = [0.9715, 0.9757]
 
 fig, ax1 = plt.subplots(figsize=(6,4))
 ax1.bar(models, params_m, color="lightgray")
@@ -347,6 +348,7 @@ plt.tight_layout()
 plt.show()
 
 """## Training Efficiency Comparison"""
+
 def count_trainable(model):
     total = sum(p.numel() for p in model.parameters())
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -360,6 +362,7 @@ count_trainable(full_model)
 count_trainable(lora_model)  # LoRA
 
 """## Error Analysis"""
+
 pred_df = pd.DataFrame({
     "sentence": test_df["sentence"].values,
     "true": [label_order[i] for i in y_true],
